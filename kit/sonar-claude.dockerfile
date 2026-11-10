@@ -3,14 +3,10 @@
 # the descriptor needs no `dockerfile:` field.
 
 # MIGRATION NOTE: the v2 kit had no Dockerfile — `extends: claude` pulled in the
-# claude agent kit's image and install. v3 workloads bake their own root
-# filesystem, so this builds FROM an image that already contains the `claude`
-# binary and the hardened `agent` user (uid 1000, home /home/agent). There is no
-# literal image to carry over verbatim; confirm BASE_IMAGE points at the
-# published claude v3 kit image (or the base the examples/claude workload uses)
-# before publishing. The entrypoint execs `claude`, so the binary must be on
-# PATH in this base.
-ARG BASE_IMAGE=docker/sandbox-templates:claude
+# Claude agent image and install. The v3 workload starts from Docker's published
+# Claude Code template, which includes the `claude` binary and the `agent` user
+# (uid 1000, home /home/agent) required by the entrypoint and sandbox.
+ARG BASE_IMAGE=docker/sandbox-templates:claude-code
 FROM ${BASE_IMAGE}
 
 # The kit's runtime files. Kept under files/home/sonar-kit/ so the host-side
